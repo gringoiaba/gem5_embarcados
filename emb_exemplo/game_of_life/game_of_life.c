@@ -1,60 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
-#define GAME_SIZE 90
+#define GAME_SIZE 200
 #define TRUE 1
 #define FALSE 0
 #define TOTAL_ITERATIONS 1
 #define BIRTH_THRESHOLD 89
 
-void init_game_matrix(int game_matrix[GAME_SIZE][GAME_SIZE]) {
-  srand(time(NULL));
+void init_game_matrix(unsigned char game_matrix[GAME_SIZE][GAME_SIZE]) {
+    unsigned char i, j, random_integer;
+    srand(4);
+    for (i = 0; i < GAME_SIZE; i++) {
+        for (j = 0; j < GAME_SIZE; j++) {
+            game_matrix[i][j] = FALSE;
 
-  int i;
-  for (i = 0; i < GAME_SIZE; i++) {
-    int j;
-    for (j = 0; j < GAME_SIZE; j++) {
-      game_matrix[i][j] = FALSE;
+            random_integer = rand() % 100;
 
-      int random_integer = rand() % 100;
-
-      if (random_integer >= BIRTH_THRESHOLD) {
-        game_matrix[i][j] = TRUE;
+            if (random_integer >= BIRTH_THRESHOLD) {
+                game_matrix[i][j] = TRUE;
       }
     }
   }
 }
 
-void print_game_matrix(int game_matrix[GAME_SIZE][GAME_SIZE]) {
-  int i;
-  for (i = 0; i < GAME_SIZE; i++) {
-    int j;
-    for (j = 0; j < GAME_SIZE; j++) {
-      if (game_matrix[i][j]) {
-        printf("X");
-      } else {
-        printf(" ");
-      }
-    }
-    printf("\n");
-  }
-}
-
-void update_game_matrix(int game_matrix[GAME_SIZE][GAME_SIZE]) {
-  srand(time(NULL));
-  int i;
-  for (i = 0; i < GAME_SIZE; i++) {
-    int j;
-    for (j = 0; j < GAME_SIZE; j++) {
-      int left_neighbour = FALSE;
-      int right_neighbour = FALSE;
-      int up_neighbour = FALSE;
-      int down_neighbour = FALSE;
-      int left_up_neighbour = FALSE;
-      int right_up_neighbour = FALSE;
-      int left_down_neighbour = FALSE;
-      int right_down_neighbour = FALSE;
+void update_game_matrix(unsigned char game_matrix[GAME_SIZE][GAME_SIZE]) {
+    unsigned char i, j, total_sum, random_coord_x, random_coord_y, random_integer;
+    srand(4);
+    for (i = 0; i < GAME_SIZE; i++) {
+        for (j = 0; j < GAME_SIZE; j++) {
+          unsigned char left_neighbour = FALSE;
+          unsigned char right_neighbour = FALSE;
+          unsigned char up_neighbour = FALSE;
+          unsigned char down_neighbour = FALSE;
+          unsigned char left_up_neighbour = FALSE;
+          unsigned char right_up_neighbour = FALSE;
+          unsigned char left_down_neighbour = FALSE;
+          unsigned char right_down_neighbour = FALSE;
 
       if (i - 1 >= 0) {
         left_neighbour = game_matrix[i - 1][j];
@@ -82,7 +63,7 @@ void update_game_matrix(int game_matrix[GAME_SIZE][GAME_SIZE]) {
         right_up_neighbour = game_matrix[i + 1][j + 1];
       }
 
-      int total_sum = left_neighbour + right_neighbour + up_neighbour +
+      total_sum = left_neighbour + right_neighbour + up_neighbour +
                       down_neighbour + left_down_neighbour + left_up_neighbour +
                       right_down_neighbour + right_up_neighbour;
 
@@ -96,9 +77,9 @@ void update_game_matrix(int game_matrix[GAME_SIZE][GAME_SIZE]) {
         }
       }
 
-      int random_coord_x = rand() % GAME_SIZE;
-      int random_coord_y = rand() % GAME_SIZE;
-      int random_integer = rand() % 100;
+      random_coord_x = rand() % GAME_SIZE;
+      random_coord_y = rand() % GAME_SIZE;
+      random_integer = rand() % 100;
 
       if (random_integer >= 19) {
         game_matrix[i][j] = game_matrix[random_coord_x][random_coord_y];
@@ -108,13 +89,12 @@ void update_game_matrix(int game_matrix[GAME_SIZE][GAME_SIZE]) {
 }
 
 int main() {
-  int game_matrix[GAME_SIZE][GAME_SIZE];
+  unsigned char game_matrix[GAME_SIZE][GAME_SIZE];
+    unsigned char i;
 
   init_game_matrix(game_matrix);
 
-  int _i;
-  for (_i = 0; _i < TOTAL_ITERATIONS; _i++) {
-    // print_game_matrix(game_matrix);
+  for (i = 0; i < TOTAL_ITERATIONS; i++) {
     update_game_matrix(game_matrix);
   }
 }

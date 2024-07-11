@@ -1,0 +1,9 @@
+
+application		time			cycles
+conway_small  = 0s.265ms.406	530.813
+conway_medium = 22s.661ms.410   45.322.821
+conway_large  = 1:51.848ms.886  223.697.772
+
+hello_world	 =
+frankenstein =
+fernando	 =
