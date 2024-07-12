@@ -79,9 +79,10 @@ void md5Update(MD5Context *ctx, unsigned char *input_buffer, size_t input_len){
     unsigned int input[16];
     unsigned int offset = ctx->size % 64;
     ctx->size += (unsigned long long)input_len;
+	unsigned int i, j;
 
     // Copy each byte in input_buffer into the next space in our context input
-    for(unsigned int i = 0; i < input_len; ++i){
+    for(i = 0; i < input_len; ++i){
         ctx->input[offset++] = (unsigned char)*(input_buffer + i);
 
         // If we've filled our context input, copy it into our local array input
@@ -89,7 +90,7 @@ void md5Update(MD5Context *ctx, unsigned char *input_buffer, size_t input_len){
         // Every time we fill out a chunk, we run it through the algorithm
         // to enable some back and forth between cpu and i/o
         if(offset % 64 == 0){
-            for(unsigned int j = 0; j < 16; ++j){
+            for(j = 0; j < 16; ++j){
                 // Convert to little-endian
                 // The local variable `input` our 512-bit chunk separated into 32-bit words
                 // we can use in calculations
@@ -112,6 +113,7 @@ void md5Finalize(MD5Context *ctx){
     unsigned int input[16];
     unsigned int offset = ctx->size % 64;
     unsigned int padding_length = offset < 56 ? 56 - offset : (56 + 64) - offset;
+	unsigned int i, j;
 
     // Fill in the padding and undo the changes to size that resulted from the update
     md5Update(ctx, PADDING, padding_length);
@@ -119,7 +121,7 @@ void md5Finalize(MD5Context *ctx){
 
     // Do a final update (internal to this function)
     // Last two 32-bit words are the two halves of the size (converted from bytes to bits)
-    for(unsigned int j = 0; j < 14; ++j){
+    for(j = 0; j < 14; ++j){
         input[j] = (unsigned int)(ctx->input[(j * 4) + 3]) << 24 |
                    (unsigned int)(ctx->input[(j * 4) + 2]) << 16 |
                    (unsigned int)(ctx->input[(j * 4) + 1]) <<  8 |
@@ -131,7 +133,7 @@ void md5Finalize(MD5Context *ctx){
     md5Step(ctx->buffer, input);
 
     // Move the result into digest (convert from little-endian)
-    for(unsigned int i = 0; i < 4; ++i){
+    fori = 0; i < 4; ++i){
         ctx->digest[(i * 4) + 0] = (unsigned char)((ctx->buffer[i] & 0x000000FF));
         ctx->digest[(i * 4) + 1] = (unsigned char)((ctx->buffer[i] & 0x0000FF00) >>  8);
         ctx->digest[(i * 4) + 2] = (unsigned char)((ctx->buffer[i] & 0x00FF0000) >> 16);
@@ -150,9 +152,9 @@ void md5Step(unsigned int *buffer, unsigned int *input){
 
     unsigned int E;
 
-    unsigned int j;
+    unsigned int temp, i, j;
 
-    for(unsigned int i = 0; i < 64; ++i){
+    for(i = 0; i < 64; ++i){
         switch(i / 16){
             case 0:
                 E = F(BB, CC, DD);
@@ -172,7 +174,7 @@ void md5Step(unsigned int *buffer, unsigned int *input){
                 break;
         }
 
-        unsigned int temp = DD;
+        temp = DD;
         DD = CC;
         CC = BB;
         BB = BB + rotateLeft(AA + E + K[i] + input[j], S[i]);
